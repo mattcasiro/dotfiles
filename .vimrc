@@ -23,7 +23,7 @@ set foldmethod=marker						" fold on {{{ }}}
 set pastetoggle=<F3>                        " toggle paste mode with F3 key
 
 " Cursor Settings {{{
-if &term =~ "xterm\\|rxvt"{{{}}}
+if &term =~ "xterm\\|rxvt"
   " use a pipe in insert mode
   let &t_SI = "\<Esc>[6 q"
   " use a block otherwise
