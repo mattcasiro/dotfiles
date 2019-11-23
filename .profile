@@ -6,7 +6,7 @@ export PATH=/Users/mcasiro/Library/Python/2.7/bin/:$PATH
 export PATH=/Users/mcasiro/Applications/:$PATH
 
 # Misc Aliases
-alias ls='la -al'
+alias la='ls -al'
 alias aws-login='aws ecr get-login --no-include-email --region us-west-2 | sh'
 alias getdt='date "+%Y%m%d%H%M%S" | pbcopy'
 alias getdte='date "+%Y%m%d%H%M%S@futurepay.com" | pbcopy'
