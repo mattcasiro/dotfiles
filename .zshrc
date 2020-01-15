@@ -57,7 +57,10 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 export EDITOR='vim'
-source ~/.profile
+source ~/.aliases
+source ~/.path
+source ~/.benevity
+source ~/.env
 
 # Custom bash line header
 

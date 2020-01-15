@@ -1,0 +1,4 @@
+echo Cleaning up docker containers
+docker container prune -f
+echo Cleaning up docker images
+docker image prune -af

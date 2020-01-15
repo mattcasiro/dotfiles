@@ -1,0 +1,3 @@
+for controlpath in ~/.ssh/mux-*; do
+  ssh -o ControlPath=$controlpath -O exit blah
+done

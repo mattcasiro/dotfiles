@@ -1,0 +1,4 @@
+:> ~/.ssh/known_hosts
+for BASTION in $(la ~/.ssh/ | grep bastion | awk '{print $NF}'); do
+    ssh -oStrictHostKeyChecking=no $BASTION
+done

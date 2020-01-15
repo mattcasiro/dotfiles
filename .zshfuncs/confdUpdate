@@ -1,0 +1,14 @@
+key=$1
+value=$2
+
+if [[ -z "$key" ]] || [[ -z "$value" ]]; then
+    echo "Must specify key and value"
+    return 1
+fi
+
+aws dynamodb put-item --table-name confd-backend --item "
+{
+  \"key\": {\"S\": \"$key\"},
+  \"value\": {\"S\": \"$value\"}
+}
+"

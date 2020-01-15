@@ -1,0 +1,10 @@
+current="$(defaults read com.apple.finder AppleShowAllFiles)"
+if [ $current = 'YES' ]; then
+    echo 'Hiding hidden files'
+    defaults write com.apple.finder AppleShowAllFiles NO
+elif [ $current = 'NO' ]; then
+    echo 'Showing hidden files'
+    defaults write com.apple.finder AppleShowAllFiles YES
+fi
+
+sudo killall Finder
