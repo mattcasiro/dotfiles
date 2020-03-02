@@ -1,0 +1,16 @@
+# Aliases
+alias -g tfplan="terraform plan -out ~/tfplans/\$(basename \$(pwd))_\$(date +%F_%H_%M_%S).tfplan"
+alias -g tfapply="terraform apply ~/tfplans/\$(ls -w1t ~/tfplans | head -1)"
+alias -g tfshow="terraform show -no-color ~/tfplans/\$(ls -w1t ~/tfplans | head -1)"
+alias -g tfinit="terraform init"
+alias -g ansaws="ansible -i /etc/ansible/ec2.py"
+alias -g kc="bundle exec kitchen converge"
+alias -g kv="bundle exec kitchen verify"
+alias -g kd="bundle exec kitchen destroy"
+
+# Okta roles
+source ~/.bash_profile
+
+# SSH Keys
+for key in $HOME/.ssh/*.org; do ssh-add -K $key > /dev/null 2>&1; done
+

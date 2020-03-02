@@ -61,6 +61,7 @@ source ~/.aliases
 source ~/.path
 source ~/.benevity
 source ~/.env
+source ~/.private
 
 # Custom bash line header
 
@@ -89,3 +90,7 @@ source ~/.env
 # For a full list of active aliases, run `alias`.
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+unsetopt nomatch
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

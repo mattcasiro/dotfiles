@@ -16,8 +16,11 @@ ln -sf ~/src/MISC/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/src/MISC/dotfiles/.aliases ~/.aliases
 ln -sf ~/src/MISC/dotfiles/.path ~/.path
 ln -sf ~/src/MISC/dotfiles/.benevity ~/.benevity
+ln -sf ~/src/MISC/dotfiles/.private ~/.private
 ln -sf ~/src/MISC/dotfiles/.env ~/.env
 ln -sf ~/src/MISC/dotfiles/.zshfuncs ~/.zshfuncs
+ln -sf ~/src/MISC/dotfiles/.gitignore_global ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
 popd > /dev/null # ~
 
 # Install darcula theme for vim
@@ -35,3 +38,7 @@ pushd fonts > /dev/null
 popd > /dev/null # ~/src/MISC
 rm -rf fonts
 popd > /dev/null # ~
+
+# OSX configurations
+mkdir ~/Screenshots
+defaults write com.apple.screencapture location ~/Screenshots

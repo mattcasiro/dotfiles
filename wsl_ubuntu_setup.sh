@@ -22,6 +22,9 @@ pushd dotfiles > /dev/null
 ln -sf ~/src/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/src/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/src/dotfiles/.aliases ~/.aliases
+ln -sf ~/src/MISC/dotfiles/.private ~/.private
+ln -sf ~/src/MISC/dotfiles/.gitignore_global ~/.gitignore_global
+git config --global core.excludesfile ~/.gitignore_global
 popd > /dev/null # ~/src
 popd > /dev/null # ~
 
