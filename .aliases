@@ -18,9 +18,3 @@ alias gcd='gfa && git checkout development && git pull'
 alias gwip='git commit -v -a -m "--wip--"'
 alias gunwip='git reset --soft HEAD^ && git reset --'
 alias gclu='git branch | grep -v "*" | xargs git branch -d'
-
-# Kitchen Aliases
-alias bekcr='bundle exec kitchen create'
-alias bekco='bundle exec kitchen converge'
-alias bekve='bundle exec kitchen verify'
-alias bekde='bundle exec kitchen destroy'
