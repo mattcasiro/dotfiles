@@ -1,0 +1,14 @@
+if [[ $# -ne 1 ]]; then
+    echo "Usage: tfplanFullFile <file_name>"
+    return 1
+fi
+
+DIR=$(basename $(pwd))
+DATE=$(date +%F_%H_%M_%S)
+TFPLAN="terraform plan -out ~/ops/tfplans/${AWS_PROFILE}_${DIR}_${DATE}.tfplan"
+
+FILE=$1
+ITEMS=$(grep -e 'resource ' -e 'module ' $FILE)
+MULTI_LINE=$(gsed -nE 's/^.*?("(.*?)" "(.*?)"|(module) "(.*?)").*?/-target=\2\4.\3\5/p' <<< $ITEMS)
+SINGLE_LINE=$(tr '\n' ' ' <<< $MULTI_LINE)
+sh -xc "$TFPLAN $SINGLE_LINE"
