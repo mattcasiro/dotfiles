@@ -30,6 +30,13 @@ mkdir -p ~/.vim/colors
 cp darcula/colors/darcula.vim ~/.vim/colors/
 popd > /dev/null # ~
 
+# Set up plugins for Vim
+mkdir -p ~/.vim/pack/plugins
+mkdir -p ~/.vim/pack/plugins/start
+mkdir -p ~/.vim/pack/plugins/opt
+# Terraform
+git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
+
 # Install powerline fonts
 pushd ~/src/MISC > /dev/null
 git clone https://github.com/powerline/fonts.git --depth=1
