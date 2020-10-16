@@ -58,6 +58,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 export EDITOR='vim'
 source ~/.aliases
+source ~/.awsrc
 source ~/.path
 source ~/.benevity
 source ~/.env
