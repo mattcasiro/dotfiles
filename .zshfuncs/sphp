@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ -z $1 ]]; then
+    echo "Must provide a version"
+    return 1
+fi
+
+version=$1
+
+if ! $(brew list "php@${version}" &> /dev/null); then
+    echo -n "Version ${version} is not installed, would you like to install now? [Y/n]: "
+    read install
+    
+    case "${install}" in
+        [yY][eE][sS]|[yY]|"")
+            brew tap shivammathur/php
+            brew install "shivammathur/php/php@${version}"
+            ;;
+        
+        *)
+            return 1
+    esac
+fi
+
+# Unlink the current version of PHP
+brew unlink php &>/dev/null
+
+# Link the new version
+brew link --force --overwrite "php@$version"
+
+echo "Switched to PHP version $version."
+

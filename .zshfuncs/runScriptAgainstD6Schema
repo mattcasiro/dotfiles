@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# This can be adjusted if script is wrapped in the thing that uses AWS_PROFILE
+PREPROD_PORT=13307
+
+SQL_FILE="${1?Please provide path to mysql file.}"
+SCHEMAS=($(mysql -h127.0.0.1 -P ${PREPROD_PORT} information_schema -rANB -e 'select distinct( table_schema ) from TABLES where table_name != "SITE_DEPROVISIONED" AND table_schema NOT IN ("information_schema")'))
+
+for SCHEMA in "${SCHEMAS[@]}"; do
+    echo "Running on ${SCHEMA}..."
+    mysql -h127.0.0.1 -P ${PREPROD_PORT} ${SCHEMA} -rANB < $SQL_FILE >> ${SQL_FILE}.PREPROD.out;
+done

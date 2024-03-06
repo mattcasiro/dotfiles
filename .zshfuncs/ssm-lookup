@@ -1,0 +1,1 @@
+aws ssm get-parameters --name $1 --with-decryption | jq '.Parameters[].Value' -r

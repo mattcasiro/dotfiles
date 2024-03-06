@@ -1,0 +1,8 @@
+NAME="$1"
+VALUE="$2"
+TYPE="$3"
+shift
+shift
+shift
+
+aws ssm put-parameter --name "${NAME}" --value "${VALUE}" --type "${TYPE}" "$@"

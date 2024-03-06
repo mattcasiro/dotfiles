@@ -1,0 +1,1 @@
+grep -B3 -A2 $1 ~/.aws/config

@@ -1,0 +1,34 @@
+if [ -z "$1" ]; then
+    echo "Usage: tftargetfile <filename>"
+    exit
+fi
+
+FILE=$1
+
+# Extract modules
+MODULES=$(cat ${FILE} | grep '^module')
+
+# Transform modules
+MODULES=$(echo ${MODULES} | sed -nE 's/^(.*) "(.*)" \{/-target=\1.\2 \\/p')
+
+# Extract resources
+RESOURCES=$(cat ${FILE} | grep '^resource')
+
+# Transform resources
+RESOURCES=$(echo ${RESOURCES} | sed -nE 's/^.* "(.*)" "(.*)" \{/-target=\1.\2 \\/p')
+
+# Combine targets
+TARGETS="tfplan \\"
+if [ -n "${MODULES}" ]; then
+    TARGETS="${TARGETS}
+${MODULES}"
+fi
+if [ -n "${RESOURCES}" ]; then
+    TARGETS="${TARGETS}
+${RESOURCES}"
+fi
+
+# Clear trailing backslash
+TARGETS=$(echo $TARGETS | sed '$s/ \\$//')
+
+echo "${TARGETS}"

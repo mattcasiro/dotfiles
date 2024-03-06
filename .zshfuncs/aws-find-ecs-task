@@ -1,0 +1,6 @@
+CLUSTERS=($(aws ecs list-clusters --query 'clusterArns[]' --output text | xargs -n1 | cut -d/ -f2))
+for CLUSTER in "${CLUSTERS[@]}"; do
+    echo "Checking: $CLUSTER"
+    aws ecs describe-tasks --tasks $1 --cluster $CLUSTER
+    echo
+done

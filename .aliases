@@ -4,6 +4,7 @@ alias aws-login='aws ecr get-login --no-include-email --region us-west-2 | sh'
 alias getdt='date "+%Y%m%d%H%M%S" | pbcopy'
 alias getdte='date "+%Y%m%d%H%M%S@futurepay.com" | pbcopy'
 alias iphp='docker run -it --rm php:5.6'
+alias ans='ansible -e ansible_connection=aws_ssm'
 
 # Docker Aliases
 alias dps='docker ps --no-trunc --format="table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
@@ -18,3 +19,9 @@ alias gcd='gfa && git checkout development && git pull'
 alias gwip='git commit -v -a -m "--wip--"'
 alias gunwip='git reset --soft HEAD^ && git reset --'
 alias gclu='git branch | grep -v "*" | xargs git branch -d'
+alias gct='git checkout trunk'
+
+alias tzconvert='python3.9 ~/src/MISC/utc-convert.py'
+
+# StrongDM Aliases
+alias mysdm='mysql -Ah 127.0.0.1 -P'
