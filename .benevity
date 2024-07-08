@@ -8,10 +8,14 @@ alias -g sshmft-staging-gateway="ssh 10.23.61.84"
 alias -g awso="aws sso login && awssso"
 
 # Okta roles and helper functions
-source ~/.benevity_rc
+if [[ -a ~/.benevity_rc ]]; then
+    source ~/.benevity_rc
+fi
 
 # SSH Keys
 # for key in $HOME/.ssh/*.org; do ssh-add -K $key > /dev/null 2>&1; done
 
 # API Keys
-. ~/.secrets
+if [[ -a ~/.secrets ]]; then
+    source ~/.secrets
+fi

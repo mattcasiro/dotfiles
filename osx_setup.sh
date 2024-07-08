@@ -5,9 +5,33 @@ fi
 
 # Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+(echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/mcasiro/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
 brew update
 brew upgrade
-pip install --upgrade pip setuptools
+
+# Install go
+brew install go
+go version
+
+# Install rbenv
+brew install rbenv
+
+# Install jenv
+brew install jenv
+
+# Install pipx
+brew install pipx
+pipx ensurepath
+sudo pipx ensurepath --global
+
+# Install argcomplete
+pipx install argcomplete
+
+# Install Python
+brew install pyenv
+eval "$(pyenv init -)"
+pyenv install
 
 # Install Zsh and OhMyZsh
 brew install zsh
@@ -27,7 +51,7 @@ ln -sf ~/src/personal/dotfiles/.zshfuncs ~/.zshfuncs
 ln -sf ~/src/personal/dotfiles/.zshrc ~/.zshrc
 popd > /dev/null # ~
 
-exec zsh
+. ~/.zshrc
 
 # Install darcula theme for vim
 pushd ~/src/personal > /dev/null

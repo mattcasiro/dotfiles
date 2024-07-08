@@ -103,12 +103,13 @@ SHOW_AWS_PROMPT=true
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/.private
 source ~/.aliases
 source ~/.awsrc
-source ~/.path
 source ~/.benevity
 source ~/.env
+if [[ -a ~/.private ]]; then
+    source ~/.private
+fi
 
 # Init JENV
 export PATH="$HOME/.jenv/bin:$PATH"
@@ -117,8 +118,3 @@ eval "$(jenv init -)"
 # SDM Setup
 export SDM_EMAIL='mcasiro@benevity.com'
 
-# Init gcloud
-source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
