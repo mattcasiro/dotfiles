@@ -10,6 +10,9 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 brew update
 brew upgrade
 
+# Install fzf for improved reverse search
+brew install fzf
+
 # Install go
 brew install go
 go version
@@ -27,6 +30,12 @@ sudo pipx ensurepath --global
 
 # Install argcomplete
 pipx install argcomplete
+
+# Install AWS cli
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
+
+# Install Maccy clipboard manager
 
 # Install Python
 brew install pyenv
