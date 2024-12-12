@@ -59,7 +59,6 @@ pushd ~/src/personal/dotfiles > /dev/null
 #ln -sf ~/src/personal/dotfiles/.aerospace.toml ~/.aerospace.toml
 ln -sf ~/src/personal/dotfiles/.aliases ~/.aliases
 ln -sf ~/src/personal/dotfiles/.awsrc ~/.awsrc
-ln -sf ~/src/personal/dotfiles/.benevity ~/.benevity
 ln -sf ~/src/personal/dotfiles/.env ~/.env
 ln -sf ~/src/personal/dotfiles/.gitignore_global ~/.gitignore_global
 git config --global core.excludesfile ~/.gitignore_global

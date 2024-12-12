@@ -105,7 +105,6 @@ SHOW_AWS_PROMPT=true
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.aliases
 source ~/.awsrc
-source ~/.benevity
 source ~/.env
 if [[ -a ~/.private ]]; then
     source ~/.private
@@ -115,8 +114,9 @@ fi
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 
-# SDM Setup
-export SDM_EMAIL='mcasiro@benevity.com'
+# Setup Intellij IDEA CLI command
+export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
+
 
 source <(fzf --zsh)
 
