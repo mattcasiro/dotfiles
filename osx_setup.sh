@@ -36,6 +36,13 @@ curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
 sudo installer -pkg AWSCLIV2.pkg -target /
 
 # Install Maccy clipboard manager
+brew install maccy
+
+# Install AeroSpace (tiling window manager)
+# If uncommenting this line, also uncomment linking the dotfile
+# brew install --cask nikitabobko/tap/aerospace
+# Install Rectangle (window snapping)
+brew install --cask rectangle
 
 # Install Python
 brew install pyenv
@@ -49,6 +56,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 
 # Install dotfiles
 pushd ~/src/personal/dotfiles > /dev/null
+#ln -sf ~/src/personal/dotfiles/.aerospace.toml ~/.aerospace.toml
 ln -sf ~/src/personal/dotfiles/.aliases ~/.aliases
 ln -sf ~/src/personal/dotfiles/.awsrc ~/.awsrc
 ln -sf ~/src/personal/dotfiles/.benevity ~/.benevity

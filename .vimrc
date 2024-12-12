@@ -24,6 +24,7 @@ set foldnestmax=10                        " only allow 'x' amount of nested fold
 set foldmethod=marker                     " fold on {{{ }}}
 set pastetoggle=<F3>                      " toggle paste mode with F3 key
 set lcs+=space:·                          " add spaces to characters shown by :set list
+set mouse=a                               " mouse scrolling
 let g:netrw_banner=0                      " hide banner in netrw explorer
 let g:netrw_liststyle=3                   " select list style for netrw explorer
 let g:terraform_align=1                   " Allow vim-terraform to align settings automatically with Tabularize.
