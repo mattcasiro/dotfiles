@@ -24,7 +24,7 @@ func asli() {
             echo "Logging in with profile $1"
             aws sso login
         else
-            echo "Swapped to profile $1: credentials expire at ${EXPIRY}"
+            echo "Swapped to profile $1: credentials expire on $(gdate --date="${EXPIRY}" +"%Y-%m-%d at %H:%M:%S")"
         fi
     fi
 }
