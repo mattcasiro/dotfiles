@@ -123,6 +123,9 @@ if [[ -a ~/.private ]]; then
     source ~/.private
 fi
 
+# Init profile completions for custom asli function
+. ~/.zshfuncs/asli
+
 # Init JENV
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
