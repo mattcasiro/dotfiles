@@ -32,8 +32,14 @@ sudo pipx ensurepath --global
 pipx install argcomplete
 
 # Install AWS cli
+sudo softwareupdate --install-rosetta
 curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
 sudo installer -pkg AWSCLIV2.pkg -target /
+
+### Kubernetes Tooling
+# Install kubectl to manage Kubernetes
+brew install kubectl
+brew install fluxcd/tap/flux
 
 # Install Maccy clipboard manager
 brew install maccy
@@ -80,6 +86,9 @@ popd > /dev/null # ~
 mkdir -p ~/.vim/pack/plugins
 mkdir -p ~/.vim/pack/plugins/start
 mkdir -p ~/.vim/pack/plugins/opt
+
+# tenv for Terraform version management
+brew install tenv
 
 # Terraform for vim
 git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform

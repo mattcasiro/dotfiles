@@ -70,7 +70,20 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(aws docker docker-compose git npm nvm sudo terraform)
+plugins=(
+    aws
+    docker
+    docker-compose
+    git
+    npm
+    nvm
+    sudo
+    terraform
+    fluxcd
+    helm
+    kubectl
+    minikube
+)
 
 # Do not enable "right side prompt" from the AWS plugin
 SHOW_AWS_PROMPT=false

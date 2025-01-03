@@ -8,11 +8,15 @@ alias ans='ansible -e ansible_connection=aws_ssm'
 
 # Docker Aliases
 alias dps='docker ps --no-trunc --format="table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
-alias docc='docker-compose'
-alias doccr='docker-compose run --rm'
 alias dclup="docker ps --no-trunc --format=\"table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\" -a | grep -i exited | awk '{print $1}' | xargs docker rm"
-alias doccl='docker-compose logs -f'
-alias docclogin='$(aws ecr get-login --no-include-email --profile default)'
+alias docc='docker-compose'
+alias dcr='docker-compose run --rm -it'
+alias dlogin='$(aws ecr get-login --no-include-email --profile default)'
+
+# Kubectl
+alias kc='kubectl'
+alias mkc='minikube kubectl --'
+alias mk='minikube'
 
 # Git Aliases
 alias gcd='gfa && git checkout development && git pull'

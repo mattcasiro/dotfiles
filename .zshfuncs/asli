@@ -1,0 +1,28 @@
+if [[ -z "$1" ]]; then
+    echo "Clearing AWS profile and logging out of SSO"
+    unset AWS_DEFAULT_PROFILE
+    unset AWS_PROFILE
+    unset AWS_EB_PROFILE
+    aws sso logout
+else
+    export AWS_DEFAULT_PROFILE=$1
+    export AWS_PROFILE=$1
+    export AWS_EB_PROFILE=$1
+
+    # Renew if expires in less than two hours
+    CREDS=$(aws configure export-credentials --profile ${AWS_PROFILE} 2>/dev/null)
+    if [[ $? > 0 ]]; then
+        aws sso login
+        return
+    fi
+
+    EXPIRY=$(echo ${CREDS} | jq -r '.Expiration')
+    FMT_EXPIRY=$(gdate --utc --date="${EXPIRY}" +"%Y-%m-%d %H:%M:%S")
+    CHECK_DATE=$(gdate -d '2 hours' +"%Y-%m-%d %H:%M:%S")
+    if [[ "${FMT_EXPIRY}" < "${CHECK_DATE}" ]]; then
+        echo "Logging in with profile $1"
+        aws sso login
+    else
+        echo "Swapped to profile $1: credentials expire at ${EXPIRY}"
+    fi
+fi
