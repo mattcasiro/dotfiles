@@ -1,31 +1,97 @@
+func _set_pip_global_index() {
+    if [[ $2 == "debug" ]]; then echo "DEBUG: Entered set pip!"; fi
+    if [[ $2 == "debug" ]]; then echo "DEBUG: arg1: $1"; fi
+    if [[ $1 == 065272653429 ]]; then
+        local domain=orennia
+    else
+        local domain=artifacts
+    fi
+    aws codeartifact login \
+        --tool pip \
+        --domain ${domain} \
+        --domain-owner $1 \
+        --repository pypi-store
+} 
+
+func _set_legacy_credentials_file() {
+    # Remove rogue credentials directory if it exists
+    if [[ -d ~/.aws/credentials ]]; then
+        rm -rf ~/.aws/credentials
+    fi
+
+    local creds=$(aws configure export-credentials)
+    # Extract and format the keys
+    AWS_ACCESS_KEY_ID=$(echo "$creds" | jq -r '.AccessKeyId')
+    AWS_SECRET_ACCESS_KEY=$(echo "$creds" | jq -r '.SecretAccessKey')
+    AWS_SESSION_TOKEN=$(echo "$creds" | jq -r '.SessionToken')
+
+    {
+        echo "[${AWS_PROFILE}]"
+        echo "aws_access_key_id = $AWS_ACCESS_KEY_ID"
+        echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY"
+        if [ -n "$AWS_SESSION_TOKEN" ]; then
+            echo "aws_session_token = $AWS_SESSION_TOKEN"
+        fi
+    } > ~/.aws/credentials
+}
+
 func asli() {
+    if [[ $2 == "debug" ]]; then echo "DEBUG ON!"; fi
     if [[ -z "$1" ]]; then
-        echo "Clearing AWS profile and logging out of SSO"
+        echo "Clearing AWS profile"
         unset AWS_DEFAULT_PROFILE
         unset AWS_PROFILE
         unset AWS_EB_PROFILE
+        echo "Logging out of SSO"
         aws sso logout
+        echo "Unsetting pip codeartifact index"
+        pip config unset global.index-url
     else
         export AWS_DEFAULT_PROFILE=$1
         export AWS_PROFILE=$1
         export AWS_EB_PROFILE=$1
 
-        # Renew if expires in less than two hours
-        CREDS=$(aws configure export-credentials --profile ${AWS_PROFILE} 2>/dev/null)
+        local do_login=0
+        if [[ $2 == "debug" ]]; then echo "DEBUG: getting creds..."; fi
+        local creds=$(aws configure export-credentials \
+            --profile ${AWS_PROFILE} 2>/dev/null)
+
+        # Renew if creds are not retrievable
         if [[ $? > 0 ]]; then
-            aws sso login
-            return
+            do_login=1
+            if [[ $2 == "debug" ]]; then echo "DEBUG: do_login! (a)"; fi
         fi
 
-        EXPIRY=$(echo ${CREDS} | jq -r '.Expiration')
-        FMT_EXPIRY=$(gdate --utc --date="${EXPIRY}" +"%Y-%m-%d %H:%M:%S")
-        CHECK_DATE=$(gdate -d '2 hours' +"%Y-%m-%d %H:%M:%S")
-        if [[ "${FMT_EXPIRY}" < "${CHECK_DATE}" ]]; then
+        # Renew if expires in less than two hours
+        local expiry=$(echo ${creds} | jq -r '.Expiration')
+        if [[ $2 == "debug" ]]; then echo "DEBUG: expiry=${expiry}"; fi
+
+        fmt_expiry=$(gdate --utc --date="${expiry}" +"%Y-%m-%d %H:%M:%S")
+        if [[ $2 == "debug" ]]; then echo "DEBUG: fmt_expiry=${fmt_expiry}"; fi
+        check_date=$(gdate -d '2 hours' +"%Y-%m-%d %H:%M:%S")
+        if [[ $2 == "debug" ]]; then echo "DEBUG: check_date=${check_date}"; fi
+        if [[ "${fmt_expiry}" < "${check_date}" ]]; then
+            do_login=1
+            if [[ $2 == "debug" ]]; then echo "DEBUG: do_login! (b)"; fi
+        fi
+
+        if [[ $do_login == 1 ]]; then
             echo "Logging in with profile $1"
             aws sso login
+            local creds=$(aws configure export-credentials --profile ${AWS_PROFILE} 2>/dev/null)
+            local expiry=$(echo ${creds} | jq -r '.Expiration')
+            echo "Credentials expire on $(gdate --date="${expiry}" +"%Y-%m-%d at %H:%M:%S")"
         else
-            echo "Swapped to profile $1: credentials expire on $(gdate --date="${EXPIRY}" +"%Y-%m-%d at %H:%M:%S")"
+            echo "Swapped to profile $1: credentials expire on $(gdate --date="${expiry}" +"%Y-%m-%d at %H:%M:%S")"
         fi
+
+        # Log pip into AWS CodeArtifact (optional)
+        echo "Updating pip global global.index-url"
+        _set_pip_global_index "$(aws sts get-caller-identity | jq -r '.Account')" "$2"
+
+        # Prepare the legacy AWS credentials file for use by docker (e.g. airflow) (optional)
+        echo "Updating legacy credentials file"
+        _set_legacy_credentials_file
     fi
 }
 

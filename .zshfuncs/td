@@ -1,0 +1,4 @@
+#!/bin/bash
+td() {
+    terraform-docs md $1 > $1/README.md
+}

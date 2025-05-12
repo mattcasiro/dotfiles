@@ -122,9 +122,7 @@ source ~/.env
 if [[ -a ~/.private ]]; then
     source ~/.private
 fi
-
-# Init profile completions for custom asli function
-. ~/.zshfuncs/asli
+source ~/.orennia
 
 # Init JENV
 export PATH="$HOME/.jenv/bin:$PATH"
@@ -133,9 +131,34 @@ eval "$(jenv init -)"
 # Setup Intellij IDEA CLI command
 export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
 
+# Use GNU versions of things
+export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
 
 source <(fzf --zsh)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Auto switch node version
+autoload -U add-zsh-hook
+load-nvmrc() {
+  if [[ -f .nvmrc && -r .nvmrc ]]; then
+    nvm use
+  elif [[ $(nvm version) != $(nvm version default)  ]]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/mcasiro/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+# Gotta source the file for autocompletions
+. ~/.zshfuncs/asli

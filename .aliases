@@ -1,20 +1,20 @@
 # Misc Aliases
 alias la='ls -al'
-alias aws-login='aws ecr get-login --no-include-email --region us-west-2 | sh'
+alias aws-login='aws ecr get-login --no-include-email | sh'
 alias getdt='date "+%Y%m%d%H%M%S" | pbcopy'
 alias getdte='date "+%Y%m%d%H%M%S@futurepay.com" | pbcopy'
 alias iphp='docker run -it --rm php:5.6'
 alias ans='ansible -e ansible_connection=aws_ssm'
+alias pc='pre-commit'
 
 # Docker Aliases
 alias dps='docker ps --no-trunc --format="table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
-alias dclup="docker ps --no-trunc --format=\"table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\" -a | grep -i exited | awk '{print $1}' | xargs docker rm"
+alias dclu="docker ps --no-trunc --format=\"table {{.Names}}\t{{.Command}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\" -a | grep -i exited | awk '{print $1}' | xargs docker rm"
 alias docc='docker-compose'
 alias dcr='docker-compose run --rm -it'
-alias dlogin='$(aws ecr get-login --no-include-email --profile default)'
+alias dlogin='aws ecr get-login-password | docker login -u AWS --password-stdin "https://$(aws sts get-caller-identity --query "Account" --output text).dkr.ecr.us-east-1.amazonaws.com"'
 
 # Kubectl
-alias kc='kubectl'
 alias mkc='minikube kubectl --'
 alias mk='minikube'
 
