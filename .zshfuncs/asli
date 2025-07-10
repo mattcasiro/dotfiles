@@ -53,26 +53,27 @@ func asli() {
 
         local do_login=0
         if [[ $2 == "debug" ]]; then echo "DEBUG: getting creds..."; fi
-        local creds=$(aws configure export-credentials \
-            --profile ${AWS_PROFILE} 2>/dev/null)
+        local creds=$(aws configure export-credentials --profile ${AWS_PROFILE} 2>/dev/null)
 
         # Renew if creds are not retrievable
-        if [[ $? > 0 ]]; then
+        if [[ -z "$creds" ]]; then
             do_login=1
-            if [[ $2 == "debug" ]]; then echo "DEBUG: do_login! (a)"; fi
-        fi
+            if [[ $2 == "debug" ]]; then echo "DEBUG: creds failed, do_login! (a)"; fi
+        else
+            if [[ $2 == "debug" ]]; then echo "DEBUG: creds '$creds' (length: ${#creds}) was not empty"; fi
 
-        # Renew if expires in less than two hours
-        local expiry=$(echo ${creds} | jq -r '.Expiration')
-        if [[ $2 == "debug" ]]; then echo "DEBUG: expiry=${expiry}"; fi
+            # Renew if expires in less than two hours
+            local expiry=$(echo ${creds} | jq -r '.Expiration')
+            if [[ $2 == "debug" ]]; then echo "DEBUG: expiry=${expiry}"; fi
 
-        fmt_expiry=$(gdate --utc --date="${expiry}" +"%Y-%m-%d %H:%M:%S")
-        if [[ $2 == "debug" ]]; then echo "DEBUG: fmt_expiry=${fmt_expiry}"; fi
-        check_date=$(gdate -d '2 hours' +"%Y-%m-%d %H:%M:%S")
-        if [[ $2 == "debug" ]]; then echo "DEBUG: check_date=${check_date}"; fi
-        if [[ "${fmt_expiry}" < "${check_date}" ]]; then
-            do_login=1
-            if [[ $2 == "debug" ]]; then echo "DEBUG: do_login! (b)"; fi
+            fmt_expiry=$(gdate --utc --date="${expiry}" +"%Y-%m-%d %H:%M:%S")
+            if [[ $2 == "debug" ]]; then echo "DEBUG: fmt_expiry=${fmt_expiry}"; fi
+            check_date=$(gdate -d '2 hours' +"%Y-%m-%d %H:%M:%S")
+            if [[ $2 == "debug" ]]; then echo "DEBUG: check_date=${check_date}"; fi
+            if [[ "${fmt_expiry}" < "${check_date}" ]]; then
+                do_login=1
+                if [[ $2 == "debug" ]]; then echo "DEBUG: do_login! (b)"; fi
+            fi
         fi
 
         if [[ $do_login == 1 ]]; then
