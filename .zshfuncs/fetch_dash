@@ -1,0 +1,40 @@
+fetch_dash() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: fetch_configV2 <dashboard_id>"
+    return 1
+  fi
+
+  # Prompt for env (sandbox, dev, prod)
+  echo -n "Enter env (sandbox, dev, or prod): "
+  stty echo
+  read ENVIRONMENT
+  stty echo
+  echo
+  if [[ $ENVIRONMENT != "prod" && $ENVIRONMENT != "dev" && $ENVIRONMENT != "sandbox" ]]; then
+    echo "Only 'sandbox', 'dev', and 'prod' environments are supported"
+    return 1
+  fi
+
+  [[ $ENVIRONMENT == "prod" ]] && SUFFIX=app || SUFFIX=dev
+  [[ $ENVIRONMENT == "prod" ]] && SEC_SUFFIX=prod || SEC_SUFFIX=dev
+  [[ $ENVIRONMENT == "sandbox" ]] && DB=skyon-sandbox || DB=skyon
+
+  # Prompt for password using Zsh's read with silent mode
+  #echo -n "Enter database password: "
+  #stty -echo
+  #read PGPASSWORD
+  #stty echo
+  #echo
+  PGPASSWORD=$(kgsec -n skyon-$SEC_SUFFIX skyon-secrets -o jsonpath='{.data.skyon_db_skyon_password}' | base64 -d)
+
+  ssh bastion.orennia.$SUFFIX bash -s <<EOF | jq | pbcopy
+if ! command -v psql 2&>1 > /dev/null; then
+  sudo yum install amazon-linux-extras -y 2>&1 > /dev/null
+  sudo amazon-linux-extras install postgresql14 -y 2>&1 > /dev/null
+fi
+PGPASSWORD='$PGPASSWORD' psql -h skyon-db.orennia.$SUFFIX -U skyon -d $DB -t --command="SELECT \\"configV2\\" FROM \\"Dashboard\\" WHERE id = $1"
+EOF
+
+  echo "Result copied to clipboard."
+}
+

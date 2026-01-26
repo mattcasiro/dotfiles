@@ -74,6 +74,7 @@ plugins=(
     aws
     docker
     docker-compose
+    fluxcd
     git
     npm
     nvm
