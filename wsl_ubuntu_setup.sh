@@ -10,17 +10,30 @@ if [ -t 1 ]; then
 fi
 EOF
 
+# Install fonts
+sudo add-apt-repository -y universe
+sudo apt install fonts-firacode
+
 # Install ohmyzsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
+ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+mkdir -p ~/.config
+
+# Install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all --no-bash
 
 # Install dotfiles
 mkdir -p ~/src
 ln -sf ~/src/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/src/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/src/dotfiles/.aliases ~/.aliases
+ln -sf ~/src/dotfiles/spaceship.zsh ~/.config/spaceship.zsh
 ln -sf ~/src/dotfiles/.gitignore_global ~/.gitignore_global
 git config --global core.excludesfile ~/.gitignore_global
 git config --global init.defaultBranch main
+git config --global pager.branch false
 
 # Install darcula theme for vim
 git clone git@github.com:blueshirts/darcula.git ~/src/darcula
@@ -33,12 +46,8 @@ rm -rf ~/src/darcula
 mkdir -p ~/.vim/pack/plugins
 mkdir -p ~/.vim/pack/plugins/start
 mkdir -p ~/.vim/pack/plugins/opt
-## Terraform
+## Terraform syntax
 git clone https://github.com/hashivim/vim-terraform.git ~/.vim/pack/plugins/start/vim-terraform
-## Install powerline fonts
-git clone https://github.com/powerline/fonts.git ~/src/fonts
-~/src/fonts/install.sh
-rm -rf ~/src/fonts
 
 # Install tfenv
 git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv

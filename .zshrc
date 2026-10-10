@@ -2,19 +2,36 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="~/.oh-my-zsh"
+export ZSH="${HOME}/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="agnoster"
+ZSH_THEME="spaceship"
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+    aws
+    docker
+    docker-compose
+    fluxcd
+    git
+    npm
+    nvm
+    sudo
+    terraform
+    fluxcd
+    helm
+    kubectl
+    minikube
+)
+
+source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -65,33 +82,6 @@ HIST_STAMPS="yyyy-mm-dd"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-    aws
-    docker
-    docker-compose
-    fluxcd
-    git
-    npm
-    nvm
-    sudo
-    terraform
-    fluxcd
-    helm
-    kubectl
-    minikube
-)
-
-# Do not enable "right side prompt" from the AWS plugin
-SHOW_AWS_PROMPT=false
-source $ZSH/oh-my-zsh.sh
-# Do enable AWS prompt from the agnoster theme
-SHOW_AWS_PROMPT=true
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -118,16 +108,24 @@ SHOW_AWS_PROMPT=true
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.aliases
-source ~/.awsrc
-source ~/.env
+if [[ -a ~/.awsrc ]]; then
+    source ~/.awsrc
+fi
+if [[ -a ~/.env ]]; then
+    source ~/.env
+fi
 if [[ -a ~/.private ]]; then
     source ~/.private
 fi
-source ~/.orennia
+if [[ -a ~/.orennia ]]; then
+    source ~/.orennia
+fi
 
 # Init JENV
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+if type jenv > /dev/null; then
+    export PATH="$HOME/.jenv/bin:$PATH"
+    eval "$(jenv init -)"
+fi
 
 # Setup Intellij IDEA CLI command
 export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
@@ -136,26 +134,31 @@ export PATH="/Applications/IntelliJ IDEA.app/Contents/MacOS:$PATH"
 export PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
 
 source <(fzf --zsh)
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if type nvm > /dev/null; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Auto switch node version
-autoload -U add-zsh-hook
-load-nvmrc() {
-  if [[ -f .nvmrc && -r .nvmrc ]]; then
-    nvm use
-  elif [[ $(nvm version) != $(nvm version default)  ]]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
+    # Auto switch node version
+    autoload -U add-zsh-hook
+    load-nvmrc() {
+      if [[ -f .nvmrc && -r .nvmrc ]]; then
+        nvm use
+      elif [[ $(nvm version) != $(nvm version default)  ]]; then
+        echo "Reverting to nvm default version"
+        nvm use default
+      fi
+    }
+    add-zsh-hook chpwd load-nvmrc
+fi
 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
+if type pyenv > /dev/null; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init - zsh)"
+fi
 
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/mcasiro/.rd/bin:$PATH"
@@ -165,4 +168,7 @@ export PATH="/Users/mcasiro/.rd/bin:$PATH"
 echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.zprofile
 
 # Gotta source the file for autocompletions
-. ~/.zshfuncs/asli
+if [[ -a ~/.zshfuncs/asli ]]; then
+    . ~/.zshfuncs/asli
+fi
+
