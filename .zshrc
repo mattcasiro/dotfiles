@@ -161,5 +161,8 @@ eval "$(pyenv init - zsh)"
 export PATH="/Users/mcasiro/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
+# tfenv
+echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.zprofile
+
 # Gotta source the file for autocompletions
 . ~/.zshfuncs/asli
